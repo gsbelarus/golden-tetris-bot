@@ -44,6 +44,8 @@ interface IUserHistory {
 
 const db = new FileDB<IUserHistory>(path.resolve(process.cwd(), 'data/results.json'));
 
+const logData: string[] = [];
+
 const log = (data: any, userId?: number, chatId?: number) => {
   const d = new Date();
   const date = `${d.getDate().toString().padStart(2, '0')}.${(d.getMonth() + 1).toString().padStart(2, '0')}.${d.getFullYear()}`;
@@ -58,16 +60,27 @@ const log = (data: any, userId?: number, chatId?: number) => {
     }
   }
 
-  console.log(`${date} ${time}${user}${chat}: ${data}`);
+  const msg = `${date} ${time}${user}${chat}: ${data}`;
+
+  if (logData.length > 1000000) {
+    logData.length = 0;
+  }
+  logData.push(msg);
+
+  console.log(msg);
 };
 
 const app = new Koa();
 const router = new Router();
 const contexts: TelegrafContext[] = [];
 
-
 router.get('/', (ctx, next) => {
   ctx.body = '@GoldenTetrisBot for Telegram. Copyright (c) 2020 by Golden Software of Belarus, Ltd';
+  next();
+});
+
+router.get('/log', (ctx, next) => {
+  ctx.body = '<html><body><pre>' + logData.map( l => `<div>${l}</div>` ).join('') + '</pre></body></html>';
   next();
 });
 
@@ -254,9 +267,10 @@ bot.on('message', (ctx, next) => {
       `Players registered: ${Object.keys(db.getMutable(false)).length}`,
       `Games registered: ${Object.values(db.getMutable(false)).reduce( (c, s) => c + s.results.length, 0 )}`,
       `Callbacks received: ${callbacksReceived}`,
-      `Games served: ${gamesServed}`
+      `Games served: ${gamesServed}`,
+      `Log records: ${logData.length}`,
     ]
-    return ctx.reply('```\n' + data.join('\n') + '```', { parse_mode: 'MarkdownV2' });
+    return ctx.reply('```\n' + data.join('\n') + '```\n' + `https://${host}:${port}/log`, { parse_mode: 'MarkdownV2' });
   } else {
     return next();
   }
