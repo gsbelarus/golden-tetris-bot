@@ -193,7 +193,7 @@ const getKeyboard = (lang: Lang) => Markup.inlineKeyboard([
   [
     Markup.urlButton(getLocString('visitGS', lang), 'http://gsbelarus.com')
   ]
-]);
+]).forceReply(true);
 
 const bot = new Telegraf(telegramBotToken);
 
