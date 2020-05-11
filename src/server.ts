@@ -270,7 +270,7 @@ bot.on('message', (ctx, next) => {
       `Games served: ${gamesServed}`,
       `Log records: ${logData.length}`,
     ]
-    return ctx.reply('```\n' + data.join('\n') + '```\n' + `https://${host}:${port}/log`, { parse_mode: 'MarkdownV2' });
+    return ctx.reply('```\n' + data.join('\n') + '```', { parse_mode: 'MarkdownV2' });
   } else {
     return next();
   }
