@@ -158,6 +158,8 @@ if (typeof port !== 'number' || isNaN(port)) {
   throw new Error('GOLDEN_TETRIS_TELEGRAM_BOT_PORT env variable is not specified.');
 };
 
+const tetrisRoot = `https://${host}:${port}/tetris`;
+
 https.createServer({ cert, ca, key }, koaCallback).listen(port, () => log(`HTTPS server started at ${host}:${port}`) );
 
 const telegramBotToken = process.env.GOLDEN_TETRIS_TELEGRAM_BOT_TOKEN;
@@ -272,7 +274,7 @@ bot.on('callback_query',
       //  из чата с ботом
 
       try {
-        await ctx.answerGameQuery(`https://tetris.gdmn.app:8080/tetris/index.html?no_chat_warning`);
+        await ctx.answerGameQuery(`${tetrisRoot}/index.html?no_chat_warning`);
       }
       catch(e) {
         log(e, userId, chatId);
@@ -299,7 +301,7 @@ bot.on('callback_query',
 
       try {
         const lang = ctx.callbackQuery?.from.language_code?.slice(0, 2).toLowerCase() ?? 'en';
-        await ctx.answerGameQuery(`https://tetris.gdmn.app:8080/tetris/index.html?userId=${userId}&chatId=${chatId}&lang=${lang}`);
+        await ctx.answerGameQuery(`${tetrisRoot}/index.html?userId=${userId}&chatId=${chatId}&lang=${lang}`);
         contexts[chatId] = ctx;
         log('Game submitted...', userId, chatId);
       }
