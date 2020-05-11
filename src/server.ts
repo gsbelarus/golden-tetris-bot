@@ -148,13 +148,13 @@ const ca = fs.readFileSync(path.resolve(process.cwd(), 'ssl/star.gdmn.app.ca-bun
 
 const koaCallback = app.callback();
 const host = process.env.GOLDEN_TETRIS_TELEGRAM_BOT_HOST; // 'tetris.gdmn.app';
-const port = process.env.GOLDEN_TETRIS_TELEGRAM_BOT_PORT;
+const port = Number(process.env.GOLDEN_TETRIS_TELEGRAM_BOT_PORT);
 
-if (typeof host !== 'string') {
+if (typeof host !== 'string' || !host) {
   throw new Error('GOLDEN_TETRIS_TELEGRAM_BOT_HOST env variable is not specified.');
 };
 
-if (typeof host !== 'string') {
+if (typeof port !== 'number' || isNaN(port)) {
   throw new Error('GOLDEN_TETRIS_TELEGRAM_BOT_PORT env variable is not specified.');
 };
 
@@ -162,7 +162,7 @@ https.createServer({ cert, ca, key }, koaCallback).listen(port, () => log(`HTTPS
 
 const telegramBotToken = process.env.GOLDEN_TETRIS_TELEGRAM_BOT_TOKEN;
 
-if (typeof telegramBotToken !== 'string') {
+if (typeof telegramBotToken !== 'string' || !telegramBotToken) {
   throw new Error('GOLDEN_TETRIS_TELEGRAM_BOT_TOKEN env variable is not specified.');
 };
 
