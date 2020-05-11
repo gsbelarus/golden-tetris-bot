@@ -193,7 +193,7 @@ const getKeyboard = (lang: Lang) => Markup.inlineKeyboard([
   [
     Markup.urlButton(getLocString('visitGS', lang), 'http://gsbelarus.com')
   ]
-]).forceReply(true);
+]).forceReply(true); //TODO: надо ли здесь этот force?
 
 const bot = new Telegraf(telegramBotToken);
 
