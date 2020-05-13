@@ -16,13 +16,13 @@ const serverStarted = new Date();
  * Converts given date into "DD.MM.YYYY" string.
  * @param d Date
  */
-const date2str = (d: Date) => `${d.getDate().toString().padStart(2, '0')}.${(d.getMonth() + 1).toString().padStart(2, '0')}.${d.getFullYear()}`;
+const formatDate = (d: Date) => `${d.getDate().toString().padStart(2, '0')}.${(d.getMonth() + 1).toString().padStart(2, '0')}.${d.getFullYear()}`;
 
 /**
  * Format time interval given in milliseconds into "hh:mm:ss" string.
  * @param ms Time interval in milliseconds.
  */
-const formatTime = (ms: number) => {
+const formatMSTime = (ms: number) => {
   const sec = (ms / 1000 >> 0) % 60;
   const min = (ms / (1000 * 60) >> 0) % 60;
   const hrs = (ms / (1000 * 60 * 60)) >> 0;
@@ -48,7 +48,7 @@ const logData: string[] = [];
 
 const log = (data: any, userId?: number, chatId?: number) => {
   const d = new Date();
-  const date = `${d.getDate().toString().padStart(2, '0')}.${(d.getMonth() + 1).toString().padStart(2, '0')}.${d.getFullYear()}`;
+  const date = formatDate(d);
   const time = `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}:${d.getSeconds()}`;
   let chat = chatId ? `, chatId: ${chatId}` : '';
   let user = '';
@@ -105,7 +105,7 @@ router.get('/tetris/telegramBot/v1/submitTetris/', async (ctx) => {
       const results = [
         ...userData.results,
         {
-          date: date2str(d),
+          date: formatDate(d),
           points,
           figures,
           lines,
@@ -245,7 +245,7 @@ bot.action('history', (ctx, next) => {
         getLocString('histHeader', lang),
         ''.padEnd(30, '='),
         ...userData.results
-        .map( r => `${r.date.padEnd(11, ' ')}${r.points.toString().padStart(5, ' ')}  ${r.level}   ${formatTime(r.duration)}` )
+        .map( r => `${r.date.padEnd(11, ' ')}${r.points.toString().padStart(5, ' ')}  ${r.level}   ${formatMSTime(r.duration)}` )
       ];
       return ctx.reply('```\n' + data.join('\n') + '```', { parse_mode: 'MarkdownV2' });
     } else {
