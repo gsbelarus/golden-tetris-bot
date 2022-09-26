@@ -11,7 +11,7 @@ import { TelegrafContext } from 'telegraf/typings/context';
 import { Lang, getLocString, getUserLang } from './stringResources';
 import * as dotenv from 'dotenv';
 
-dotenv.config({ path: '..' });
+dotenv.config();
 
 const serverStarted = new Date();
 
