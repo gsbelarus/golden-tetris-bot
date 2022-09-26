@@ -9,6 +9,9 @@ import Telegraf, { Markup } from 'telegraf';
 import { FileDB } from './fileDB';
 import { TelegrafContext } from 'telegraf/typings/context';
 import { Lang, getLocString, getUserLang } from './stringResources';
+import * as dotenv from 'dotenv';
+
+dotenv.config({ path: '..' });
 
 const serverStarted = new Date();
 
